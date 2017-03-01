@@ -77,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.80.4.12487</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -127,7 +127,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>24</version>
+          <version>22</version>
           <state>39</state>
         </option>
         <option>
@@ -144,7 +144,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>24</version>
+          <version>22</version>
           <state>39</state>
         </option>
         <option>
@@ -167,7 +167,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>24</version>
+          <version>22</version>
           <state>39</state>
         </option>
       </data>
@@ -336,7 +336,6 @@
           <state>c:/tauon/sys/root/src/kernel/usb\stm32f4-usb-core/core</state>
           <state>c:/tauon/sys/root/src/kernel/usb\stm32f4-usb-core/stm32_usb_device_library/Core/Inc</state>
           <state>c:/tauon/sys/root/src/kernel/usb\stm32f4-usb-core/stm32_usb_device_library/Class/AUDIO/Inc</state>
-          <state>c:/tauon/sys/root/src/kernel/usb\stm32f4-usb-core/stm32_usb_device_library/Class/MSC/Inc</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -670,7 +669,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>18</version>
+        <version>16</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -942,7 +941,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>1</version>
+          <version>0</version>
           <state>1</state>
         </option>
         <option>
@@ -953,14 +952,6 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
-        </option>
-        <option>
-          <name>IlinkLogCallGraph</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkIcfFile_AltDefault</name>
-          <state></state>
         </option>
       </data>
     </settings>
@@ -1116,7 +1107,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>24</version>
+          <version>22</version>
           <state>1</state>
         </option>
         <option>
@@ -1133,7 +1124,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>24</version>
+          <version>22</version>
           <state>0</state>
         </option>
         <option>
@@ -1156,7 +1147,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>24</version>
+          <version>22</version>
           <state>0</state>
         </option>
       </data>
@@ -1633,7 +1624,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>18</version>
+        <version>16</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1905,7 +1896,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>1</version>
+          <version>0</version>
           <state>1</state>
         </option>
         <option>
@@ -1916,14 +1907,6 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
-        </option>
-        <option>
-          <name>IlinkLogCallGraph</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkIcfFile_AltDefault</name>
-          <state></state>
         </option>
       </data>
     </settings>
@@ -1963,22 +1946,10 @@
         <group>
           <name>stm32_usb_core</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core.h</name>
-          </file>
-          <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core_audio.c</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core_audio.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core_storage.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core_storage.h</name>
           </file>
         </group>
       </group>
@@ -2012,12 +1983,6 @@
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\core\usbd_desc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\core\usbd_storage_if.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\core\usbd_storage_if.h</name>
           </file>
         </group>
         <group>
@@ -2057,39 +2022,6 @@
                 </file>
                 <file>
                   <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\AUDIO\Src\usbd_audio_if_template.c</name>
-                </file>
-              </group>
-            </group>
-            <group>
-              <name>msc</name>
-              <group>
-                <name>inc</name>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Inc\usbd_msc.h</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Inc\usbd_msc_bot.h</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Inc\usbd_msc_data.h</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Inc\usbd_msc_scsi.h</name>
-                </file>
-              </group>
-              <group>
-                <name>src</name>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Src\usbd_msc.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Src\usbd_msc_bot.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Src\usbd_msc_data.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\usb\stm32f4-usb-core\stm32_usb_device_library\Class\MSC\Src\usbd_msc_scsi.c</name>
                 </file>
               </group>
             </group>

@@ -34,28 +34,57 @@
 
 /* Includes ------------------------------------------------------------------*/
 
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "kernel/core/kernelconf.h"
+
+#include "kernel/core/errno.h"
+#include "kernel/core/types.h"
+#include "kernel/core/interrupt.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/kernel.h"
+
 #include "usb_device.h"
 #include "usbd_core.h"
 #include "usbd_desc.h"
 #include "usbd_audio.h"
 #include "usbd_audio_if.h"
 
+
 /* USB Device Core handle declaration */
 USBD_HandleTypeDef hUsbDeviceHS;
 
-/* init function */				        
-void MX_USB_DEVICE_Init(void)
+/* USB Device Core handle declaration */
+extern PCD_HandleTypeDef hpcd_USB_OTG_HS;
+
+/******************************************************************************/
+/* STM32F4xx Peripheral Interrupt Handlers                                    */
+/* Add here the Interrupt Handlers for the used peripherals.                  */
+/* For the available peripheral interrupt handler names,                      */
+/* please refer to the startup file (startup_stm32f4xx.s).                    */
+/******************************************************************************/
+
+/**
+* @brief This function handles USB On The Go HS global interrupt.
+*/
+void OTG_HS_IRQHandler(void)
 {
-  /* Init Device Library,Add Supported Class and Start the library*/
-  USBD_Init(&hUsbDeviceHS, &HS_Desc, DEVICE_HS);
-
-  USBD_RegisterClass(&hUsbDeviceHS, &USBD_AUDIO);
-
-  USBD_AUDIO_RegisterInterface(&hUsbDeviceHS, &USBD_AUDIO_fops_HS);
-
-  USBD_Start(&hUsbDeviceHS);
-
+  /* USER CODE BEGIN OTG_HS_IRQn 0 */
+  //
+  __hw_enter_interrupt();
+  //
+  /* USER CODE END OTG_HS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_HS);
+  /* USER CODE BEGIN OTG_HS_IRQn 1 */
+  //
+  __hw_leave_interrupt();
+  //
+  /* USER CODE END OTG_HS_IRQn 1 */
 }
+
+
+
 /**
   * @}
   */

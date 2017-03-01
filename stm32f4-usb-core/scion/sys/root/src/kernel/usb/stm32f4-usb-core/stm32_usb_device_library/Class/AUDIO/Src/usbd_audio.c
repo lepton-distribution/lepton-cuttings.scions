@@ -62,21 +62,21 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+#include <stdarg.h>
 #include <math.h>
     
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
-#include "kernel/core/interrupt.h"
+#include "kernel/core/dirent.h"
 #include "kernel/core/kernel.h"
-#include "kernel/core/syscall.h"
 #include "kernel/core/process.h"
-#include "kernel/core/signal.h"
 #include "kernel/core/statvfs.h"
 #include "kernel/core/ioctl.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/fs/vfs/vfskernel.h"
     
@@ -1527,7 +1527,7 @@ static uint8_t  USBD_AUDIO_DataIn (USBD_HandleTypeDef *pdev,
        //audio_channel_ring_buffer_write(USB_AUDIO_CHANNEL_INPUT_1,(uint8_t*)IsocInBuffDummy16bit,AUDIO_IN_PACKET_SZ);
        //audio_channel_ring_buffer_read(USB_AUDIO_CHANNEL_INPUT_1,(uint8_t*)IsocAudioInBuffer[USB_AUDIO_CHANNEL_INPUT_1],AUDIO_IN_PACKET_SZ);
        ///
-       kernel_ring_buffer_read(&krb_usb_audio_channel_source_input,(uint8_t*)IsocAudioInBuffer[USB_AUDIO_CHANNEL_INPUT_1],AUDIO_IN_PACKET_SZ);
+       kernel_ring_buffer_read_min(&krb_usb_audio_channel_source_input,(uint8_t*)IsocAudioInBuffer[USB_AUDIO_CHANNEL_INPUT_1],AUDIO_IN_PACKET_SZ,AUDIO_IN_PACKET_SZ);
        //
        if(__kernel_ring_buffer_is_empty(krb_usb_audio_channel_source_input)){
          __fire_io_int(ofile_lst[g_usb_audio_core_info.desc_w].owner_pthread_ptr_write);

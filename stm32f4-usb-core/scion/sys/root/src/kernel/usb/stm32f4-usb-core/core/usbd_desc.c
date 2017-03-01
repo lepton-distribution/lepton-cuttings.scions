@@ -33,9 +33,27 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "kernel/core/kernelconf.h"
+
+#include "kernel/core/errno.h"
+#include "kernel/core/types.h"
+#include "kernel/core/interrupt.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/statvfs.h"
+#include "kernel/core/ioctl.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
+#include "kernel/fs/vfs/vfstypes.h"
+
 #include "usbd_core.h"
 #include "usbd_desc.h"
 #include "usbd_conf.h"
+
+#include "kernel/core/usb/stm32_usb_core/usb_core.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
   * @{
@@ -62,7 +80,7 @@
 #define USBD_PID_HS     22336
 #define USBD_PRODUCT_STRING_HS     "nuodio tube"
 /* USER CODE BEGIN SERIALNUMBER_STRING_HS */
-#define USBD_SERIALNUMBER_STRING_HS     "00000000001A"
+#define USBD_SERIALNUMBER_STRING_HS     "00000000001B"
 /* USER CODE END SERIALNUMBER_STRING_HS */
 #define USBD_CONFIGURATION_STRING_HS     "AUDIO Config"
 #define USBD_INTERFACE_STRING_HS     "AUDIO Interface"
@@ -236,12 +254,20 @@ uint8_t *  USBD_HS_LangIDStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *leng
 uint8_t *  USBD_HS_ProductStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *length)
 {
   if(speed == 0)
-  {   
-    USBD_GetString ((uint8_t *)USBD_PRODUCT_STRING_HS, USBD_StrDesc, length);
+  { 
+    if(usb_core_attr_product_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_product_string(), USBD_StrDesc, length);
+    }else{
+      USBD_GetString ((uint8_t *)USBD_PRODUCT_STRING_HS, USBD_StrDesc, length);
+    }
   }
   else
   {
-    USBD_GetString ((uint8_t *)USBD_PRODUCT_STRING_HS, USBD_StrDesc, length);    
+    if(usb_core_attr_product_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_product_string(), USBD_StrDesc, length);
+    }else{
+      USBD_GetString ((uint8_t *)USBD_PRODUCT_STRING_HS, USBD_StrDesc, length);
+    }    
   }
   return USBD_StrDesc;
 }
@@ -255,7 +281,12 @@ uint8_t *  USBD_HS_ProductStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *len
 */
 uint8_t *  USBD_HS_ManufacturerStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *length)
 {
-  USBD_GetString ((uint8_t *)USBD_MANUFACTURER_STRING, USBD_StrDesc, length);
+   if(usb_core_attr_manufacturer_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_manufacturer_string(), USBD_StrDesc, length);
+   }else{
+      USBD_GetString ((uint8_t *)USBD_MANUFACTURER_STRING, USBD_StrDesc, length);
+   }
+
   return USBD_StrDesc;
 }
 
@@ -269,12 +300,20 @@ uint8_t *  USBD_HS_ManufacturerStrDescriptor( USBD_SpeedTypeDef speed , uint16_t
 uint8_t *  USBD_HS_SerialStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *length)
 {
   if(speed  == USBD_SPEED_HIGH)
-  {    
-    USBD_GetString ((uint8_t *)USBD_SERIALNUMBER_STRING_HS, USBD_StrDesc, length);
+  { 
+    if(usb_core_attr_serial_number_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_serial_number_string(), USBD_StrDesc, length);
+    }else{
+       USBD_GetString ((uint8_t *)USBD_SERIALNUMBER_STRING_HS, USBD_StrDesc, length);
+    }
   }
   else
   {
-    USBD_GetString ((uint8_t *)USBD_SERIALNUMBER_STRING_HS, USBD_StrDesc, length);    
+    if(usb_core_attr_serial_number_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_serial_number_string(), USBD_StrDesc, length);
+    }else{
+       USBD_GetString ((uint8_t *)USBD_SERIALNUMBER_STRING_HS, USBD_StrDesc, length);
+    }    
   }
   return USBD_StrDesc;
 }
@@ -289,12 +328,20 @@ uint8_t *  USBD_HS_SerialStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *leng
 uint8_t *  USBD_HS_ConfigStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *length)
 {
   if(speed  == USBD_SPEED_HIGH)
-  {  
-    USBD_GetString ((uint8_t *)USBD_CONFIGURATION_STRING_HS, USBD_StrDesc, length);
+  {
+    if(usb_core_attr_configuration_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_configuration_string(), USBD_StrDesc, length);
+    }else{
+      USBD_GetString ((uint8_t *)USBD_CONFIGURATION_STRING_HS, USBD_StrDesc, length);
+    }
   }
   else
   {
-    USBD_GetString ((uint8_t *)USBD_CONFIGURATION_STRING_HS, USBD_StrDesc, length); 
+    if(usb_core_attr_configuration_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_configuration_string(), USBD_StrDesc, length);
+    }else{
+      USBD_GetString ((uint8_t *)USBD_CONFIGURATION_STRING_HS, USBD_StrDesc, length);
+    }
   }
   return USBD_StrDesc;  
 }
@@ -310,11 +357,20 @@ uint8_t *  USBD_HS_InterfaceStrDescriptor( USBD_SpeedTypeDef speed , uint16_t *l
 {
   if(speed == 0)
   {
-    USBD_GetString ((uint8_t *)USBD_INTERFACE_STRING_HS, USBD_StrDesc, length);
+    if(usb_core_attr_interface_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_interface_string(), USBD_StrDesc, length);
+    }else{
+      USBD_GetString ((uint8_t *)USBD_INTERFACE_STRING_HS, USBD_StrDesc, length);
+    }
+    
   }
   else
   {
-    USBD_GetString ((uint8_t *)USBD_INTERFACE_STRING_HS, USBD_StrDesc, length);
+    if(usb_core_attr_interface_string()!=(char*)0){
+      USBD_GetString ((uint8_t *)usb_core_attr_interface_string(), USBD_StrDesc, length);
+    }else{
+      USBD_GetString ((uint8_t *)USBD_INTERFACE_STRING_HS, USBD_StrDesc, length);
+    }
   }
   return USBD_StrDesc;  
 }

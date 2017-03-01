@@ -52,6 +52,7 @@
 //#define AUDIO_OUT_EP                                  0x01
 //#define AUDIO_IN_EP                                   0x82
 
+#define NUODIO_USB
 #define USE_AUDIO_2_INTERFACES
 //#define USE_AUDIO_4_INTERFACES
 
@@ -67,9 +68,13 @@
    #define AUDIO_IN_CHANNEL_2_EP       (0X82)
 #endif
    
-#define NUODIO_USB
+
 #ifdef NUODIO_USB
-   #define USB_AUDIO_CONFIG_DESC_SIZ                     (9+9+12+4*(12+9+9)+4*(9+9+7+11+9+7)) //(109+82+1)
+    #if defined(USE_AUDIO_2_INTERFACES)
+      #define USB_AUDIO_CONFIG_DESC_SIZ                     (9+9+10+2*(12+9+9)+2*(9+9+7+11+9+7)) //(109+82+1)
+   #elif defined(USE_AUDIO_4_INTERFACES)
+      #define USB_AUDIO_CONFIG_DESC_SIZ                     (9+9+12+4*(12+9+9)+4*(9+9+7+11+9+7)) //(109+82+1)
+   #endif
 #else
    #define USB_AUDIO_CONFIG_DESC_SIZ                     (109)
 #endif

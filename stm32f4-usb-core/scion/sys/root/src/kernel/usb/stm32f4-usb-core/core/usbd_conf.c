@@ -32,10 +32,28 @@
   ******************************************************************************
 */
 /* Includes ------------------------------------------------------------------*/
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "kernel/core/kernelconf.h"
+
+#include "kernel/core/errno.h"
+#include "kernel/core/types.h"
+#include "kernel/core/interrupt.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/statvfs.h"
+#include "kernel/core/ioctl.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
+#include "kernel/fs/vfs/vfstypes.h"
+
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #include "usbd_def.h"
 #include "usbd_core.h"
+
+#include "kernel/core/usb/stm32_usb_core/usb_core.h"
 
 PCD_HandleTypeDef hpcd_USB_OTG_HS;
 
@@ -283,32 +301,27 @@ USBD_StatusTypeDef  USBD_LL_Init (USBD_HandleTypeDef *pdev)
 { 
   /* Init USB_IP */
   if (pdev->id == DEVICE_HS) {
-  /* Link The driver to the stack */
-  hpcd_USB_OTG_HS.pData = pdev;
-  pdev->pData = &hpcd_USB_OTG_HS;
+     /* Link The driver to the stack */
+     hpcd_USB_OTG_HS.pData = pdev;
+     pdev->pData = &hpcd_USB_OTG_HS;
 
-  hpcd_USB_OTG_HS.Instance = USB_OTG_HS;
-  hpcd_USB_OTG_HS.Init.dev_endpoints = 11;
-  hpcd_USB_OTG_HS.Init.speed = PCD_SPEED_FULL;
-  hpcd_USB_OTG_HS.Init.dma_enable = DISABLE;
-  hpcd_USB_OTG_HS.Init.ep0_mps = DEP0CTL_MPS_64;
-  hpcd_USB_OTG_HS.Init.phy_itface = USB_OTG_EMBEDDED_PHY;
-  hpcd_USB_OTG_HS.Init.Sof_enable = ENABLE;
-  hpcd_USB_OTG_HS.Init.low_power_enable = DISABLE;
-  hpcd_USB_OTG_HS.Init.lpm_enable = DISABLE;
-  hpcd_USB_OTG_HS.Init.vbus_sensing_enable = DISABLE;
-  hpcd_USB_OTG_HS.Init.use_dedicated_ep1 = DISABLE;
-  hpcd_USB_OTG_HS.Init.use_external_vbus = DISABLE;
-  HAL_PCD_Init(&hpcd_USB_OTG_HS);
-
-  HAL_PCD_SetRxFiFo(&hpcd_USB_OTG_HS, 0x200);
-  HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 0, 0x58);
-  //HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 1, 0x174);
-  HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 1,0x58);
-  HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 2,0x58);
-  HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 3,0x58);
-  HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 4,0x58);
-  HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 5,0x58);
+     hpcd_USB_OTG_HS.Instance = USB_OTG_HS;
+     hpcd_USB_OTG_HS.Init.dev_endpoints = 11; //6;//11;
+     hpcd_USB_OTG_HS.Init.speed = PCD_SPEED_FULL;
+     hpcd_USB_OTG_HS.Init.dma_enable = DISABLE;
+     hpcd_USB_OTG_HS.Init.ep0_mps = DEP0CTL_MPS_64;
+     hpcd_USB_OTG_HS.Init.phy_itface = USB_OTG_EMBEDDED_PHY;
+     hpcd_USB_OTG_HS.Init.Sof_enable = ENABLE;
+     hpcd_USB_OTG_HS.Init.low_power_enable = DISABLE;
+     hpcd_USB_OTG_HS.Init.lpm_enable = DISABLE;
+     hpcd_USB_OTG_HS.Init.vbus_sensing_enable = DISABLE;
+     hpcd_USB_OTG_HS.Init.use_dedicated_ep1 = DISABLE;
+     hpcd_USB_OTG_HS.Init.use_external_vbus = DISABLE;
+     HAL_PCD_Init(&hpcd_USB_OTG_HS);
+     
+     if(usb_core_init_routine(&hpcd_USB_OTG_HS)<0){
+       return USBD_FAIL;
+     }
   }
   return USBD_OK;
 }

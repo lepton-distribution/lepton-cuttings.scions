@@ -28,23 +28,18 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "kernel/core/kernelconf.h"
 
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
-#include "kernel/core/interrupt.h"
-#include "kernel/core/kernel.h"
-#include "kernel/core/syscall.h"
-#include "kernel/core/process.h"
-#include "kernel/core/signal.h"
-#include "kernel/core/statvfs.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/system.h"
 #include "kernel/core/ioctl.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
-#include "kernel/fs/vfs/vfsdev.h"
-
-#include "kernel/fs/vfs/vfskernel.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/core/kernel_ring_buffer.h"
 
@@ -54,6 +49,7 @@ either the MPL or the [eCos GPL] License."
 #include "usbd_audio.h"
 #include "usbd_audio_if.h"
 
+#include "kernel/core/usb/stm32_usb_core/usb_core.h"
 #include "kernel/core/usb/stm32_usb_core/usb_core_audio.h"
 
 /*============================================
@@ -100,42 +96,57 @@ static uint8_t usb_audio_channel_source_output_buffer[USB_AUDIO_CHANNEL_SRC_OUTP
 kernel_ring_buffer_t krb_usb_audio_channel_source_input;
 kernel_ring_buffer_t krb_usb_audio_channel_source_output;
 
+//
+#ifndef __KERNEL_USB_CORE_AUDIO_CONFIGURATION_STRING
+   #define __KERNEL_USB_CORE_AUDIO_CONFIGURATION_STRING  "AUDIO Config"
+#endif
 
+#ifndef __KERNEL_USB_CORE_AUDIO_INTERFACE_STRING
+   #define __KERNEL_USB_CORE_AUDIO_INTERFACE_STRING      "AUDIO Interface"
+#endif
+
+static const char audio_configuration_string[]=  __KERNEL_USB_CORE_AUDIO_CONFIGURATION_STRING;
+static const char audio_interface_string[]=      __KERNEL_USB_CORE_AUDIO_INTERFACE_STRING;
+
+
+static const usb_core_attr_t usb_core_audio_attr={
+   .p_manufacturer_string=(const char*)0,
+   .p_product_string=(const char*)0,
+   .p_serial_number_string=(const char*)0,
+   .p_configuration_string=audio_configuration_string,
+   .p_interface_string=audio_interface_string
+};
+
+//
 usb_audio_core_info_t g_usb_audio_core_info;
-
-/* USB Device Core handle declaration */
-extern PCD_HandleTypeDef hpcd_USB_OTG_HS;
 
 
 /*============================================
 | Implementation
 ==============================================*/
 
-/******************************************************************************/
-/* STM32F4xx Peripheral Interrupt Handlers                                    */
-/* Add here the Interrupt Handlers for the used peripherals.                  */
-/* For the available peripheral interrupt handler names,                      */
-/* please refer to the startup file (startup_stm32f4xx.s).                    */
-/******************************************************************************/
-
-/**
-* @brief This function handles USB On The Go HS global interrupt.
-*/
-void OTG_HS_IRQHandler(void)
-{
-  /* USER CODE BEGIN OTG_HS_IRQn 0 */
-  //
-  __hw_enter_interrupt();
-  //
-  /* USER CODE END OTG_HS_IRQn 0 */
-  HAL_PCD_IRQHandler(&hpcd_USB_OTG_HS);
-  /* USER CODE BEGIN OTG_HS_IRQn 1 */
-  //
-  __hw_leave_interrupt();
-  //
-  /* USER CODE END OTG_HS_IRQn 1 */
+/*-------------------------------------------
+| Name: usb_core_audio_init_routine
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+static int usb_core_audio_init_routine(struct usb_core_attr_st* attr,PCD_HandleTypeDef* hpcd){
+   
+   // audio storage config
+   HAL_PCD_SetRxFiFo(hpcd, 0x200);
+   HAL_PCD_SetTxFiFo(hpcd, 0, 0x58);
+   //HAL_PCD_SetTxFiFo(&hpcd_USB_OTG_HS, 1, 0x174);
+   HAL_PCD_SetTxFiFo(hpcd, 1,0x58);
+   HAL_PCD_SetTxFiFo(hpcd, 2,0x58);
+   HAL_PCD_SetTxFiFo(hpcd, 3,0x58);
+   HAL_PCD_SetTxFiFo(hpcd, 4,0x58);
+   HAL_PCD_SetTxFiFo(hpcd, 5,0x58);
+   //
+   return 0;
 }
-
 
 /*-------------------------------------------
 | Name:dev_usb_audio_core_load
@@ -170,6 +181,11 @@ static int dev_usb_audio_core_open(desc_t desc, int o_flag){
    
    //
    if(g_usb_audio_core_info.desc_r<0 && g_usb_audio_core_info.desc_w<0) {
+      
+      //
+      usb_core_set_current_attr((usb_core_attr_t*)&usb_core_audio_attr);
+      usb_core_set_init_routine(usb_core_audio_init_routine);
+      
       /* Init Device Library,Add Supported Class and Start the library*/
       USBD_Init(&g_usb_audio_core_info.hUsbDeviceHS, &HS_Desc, DEVICE_HS);
       USBD_RegisterClass(&g_usb_audio_core_info.hUsbDeviceHS, &USBD_AUDIO);
@@ -194,16 +210,14 @@ static int dev_usb_audio_core_open(desc_t desc, int o_flag){
 
    //
    if(!ofile_lst[desc].p){
-    
       //
       ofile_lst[desc].p = &g_usb_audio_core_info;
       //
       USBD_Start(&g_usb_audio_core_info.hUsbDeviceHS);  
       //
    }
-
+   //
    return 0;
-
 }
 
 /*-------------------------------------------

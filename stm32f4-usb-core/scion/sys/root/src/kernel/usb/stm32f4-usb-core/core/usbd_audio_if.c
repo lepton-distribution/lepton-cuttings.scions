@@ -32,8 +32,28 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
+
+#include <stdint.h>
+
+#include "kernel/core/kernelconf.h"
+#include "kernel/core/errno.h"
+#include "kernel/core/types.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/statvfs.h"
+#include "kernel/core/kernel_io.h"
+#include "kernel/core/ioctl.h"
+#include "kernel/core/ioctl_hd.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
+#include "kernel/fs/vfs/vfstypes.h"
+
+#include "kernel/fs/vfs/vfskernel.h"
+#include "kernel/core/kernel_ring_buffer.h"
+
 #include "usbd_audio_if.h"
 /* USER CODE BEGIN INCLUDE */
+#include "kernel/core/usb/stm32_usb_core/usb_core_audio.h"
 /* USER CODE END INCLUDE */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -141,6 +161,7 @@ USBD_AUDIO_ItfTypeDef USBD_AUDIO_fops_HS =
 static int8_t AUDIO_Init_HS(uint32_t  AudioFreq, uint32_t Volume, uint32_t options)
 {
   hUsbDevice_1 = &hUsbDeviceHS;
+  //hUsbDevice_1 = &g_usb_audio_core_info.hUsbDeviceHS;
   /* USER CODE BEGIN 9 */ 
   return (USBD_OK);
   /* USER CODE END 9 */
