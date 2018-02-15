@@ -2323,10 +2323,10 @@
         <group>
           <name>stm32_usb_core</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core.h</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core_audio.c</name>
@@ -2335,10 +2335,10 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core_audio.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core_storage.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core_storage.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\cuttings\master\stm32f4-usb-core\scion\sys\root\src\kernel\core\usb\stm32_usb_core\usb_core_storage.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\usb\stm32_usb_core\usb_core_storage.h</name>
           </file>
         </group>
       </group>
